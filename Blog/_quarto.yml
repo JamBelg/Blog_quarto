@@ -1,0 +1,21 @@
+project:
+  type: website
+
+website:
+  title: "Jamel Belgcem"
+  navbar:
+    right:
+      - about.qmd
+      - icon: envelope
+        href: mailto:jamelbelgacem@hotmail.com
+      - icon: github
+        href: https://github.com/JamBelg
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jamel-belgacem-289606a7/
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+editor: visual
+

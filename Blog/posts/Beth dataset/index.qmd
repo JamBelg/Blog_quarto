@@ -1,0 +1,9 @@
+---
+title: "Beth dataset"
+author: "Jamel Belgacem and Papa Moryba Kouate"
+date: "2024-06-15"
+categories: [Machine learning, Code, Cybersecurity]
+image: "image.jpg"
+---
+
+This is a post with executable code.
