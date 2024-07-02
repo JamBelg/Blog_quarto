@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Blog",
+    "title": "Jamel Belgacem",
     "section": "",
-    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 2, 2024\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 29, 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJul 2, 2024\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJun 29, 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\n  \n\n\n\n\nBeth dataset\n\n\n\n\n\n\n\nMachine learning\n\n\nCode\n\n\nCybersecurity\n\n\n\n\n\n\n\n\n\n\n\nJun 15, 2024\n\n\nJamel Belgacem and Papa Moryba Kouate\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/post-with-code/index.html",
@@ -25,6 +25,13 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this blog"
+    "text": "Jamel Belgacem is an Application Engineer with a bachelor in electrical engineering.\nHe has a big interest in machine learning topics and data science. He has a CAS certificate in advanced machine learning from the university of Bern.\nHe is sharing personal projects and tutorials on his Github"
+  },
+  {
+    "objectID": "posts/Beth dataset/index.html",
+    "href": "posts/Beth dataset/index.html",
+    "title": "Beth dataset",
+    "section": "",
+    "text": "This is a post with executable code."
   }
 ]
