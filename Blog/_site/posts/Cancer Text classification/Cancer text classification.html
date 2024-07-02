@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jamel Belgacem">
+<meta name="dcterms.date" content="2023-07-12">
+
+<title>Jamel Belgcem - Text classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jamel Belgcem</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:jamelbelgacem@hotmail.com"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JamBelg"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jamel-belgacem-289606a7/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Text classification</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Deep learning</div>
+                <div class="quarto-category">Text classification</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jamel Belgacem </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 12, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Text classification with deep learning leverages the power of deep neural networks to automatically extract complex features from textual data. By using techniques like recurrent neural networks (RNNs), convolutional neural networks (CNNs), or transformer models, deep learning enables accurate and efficient categorization of text into predefined classes, making it a robust and widely adopted approach in natural language processing tasks.</p>
+<p>For this tutorial we will use tha cancer data from <a href="https://www.kaggle.com/datasets/falgunipatel19/biomedical-text-publication-classification">Kaggle</a>. Based on biomedical text documentation, I will train a neural network to predict the type of cancer.</p>
+<section id="import-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="import-libraries">Import libraries</h3>
+<div class="cell" data-execution_count="1">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> collections</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#nltk.download('stopwords')</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> string</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.preprocessing.text <span class="im">import</span> Tokenizer</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.preprocessing.sequence <span class="im">import</span> pad_sequences</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> Embedding, Conv1D, MaxPooling1D, LSTM, Bidirectional, Dense, BatchNormalization, Dropout</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.optimizers <span class="im">import</span> Adam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="read-data" class="level3">
+<h3 class="anchored" data-anchor-id="read-data">Read data</h3>
+<p>The dataset are composed of two columns: - Type: Cancer name (Thyroid_Cancer, Colon_Cancer, Lung_Cancer) - Text: Description of the cancer</p>
+<div class="cell" data-execution_count="2">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'data/alldata_1_for_kaggle.csv'</span>, sep<span class="op">=</span><span class="st">','</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   ,header<span class="op">=</span><span class="dv">0</span>, encoding<span class="op">=</span><span class="st">'mac_latin2'</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   usecols<span class="op">=</span>[<span class="dv">1</span>,<span class="dv">2</span>],names<span class="op">=</span>[<span class="st">'Type'</span>, <span class="st">'Text'</span>])</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="2">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Type</th>
+      <th>Text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Thyroid_Cancer</td>
+      <td>Thyroid surgery in  children in a single insti...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Thyroid_Cancer</td>
+      <td>" The adopted strategy was the same as that us...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Thyroid_Cancer</td>
+      <td>coronary arterybypass grafting thrombosis Ô¨Āb...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Thyroid_Cancer</td>
+      <td>Solitary plasmacytoma SP of the skull is an u...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thyroid_Cancer</td>
+      <td>This study aimed to investigate serum matrix ...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Thyroid_Cancer</td>
+      <td>This study was performed to explore the effec...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Thyroid_Cancer</td>
+      <td>This study was performed assess the clinical ...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Thyroid_Cancer</td>
+      <td>Journal of International Medical Research ď Th...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Thyroid_Cancer</td>
+      <td>Gastric cancer GC persists as a worldwide pub...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Thyroid_Cancer</td>
+      <td>Scars Burns  HealingVolume   ď  reuse guideli...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Type'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>Type
+Thyroid_Cancer    2810
+Colon_Cancer      2580
+Lung_Cancer       2180
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data preparation:</h3>
+<p>Before injecting texts into the model, we have to clean our data:</p>
+<p>1- Remove ponctuations</p>
+<p>2- Remove numbers</p>
+<p>3- Transform to lower case</p>
+<p>4- Remove stop words like an, on, at, …</p>
+<p>5- Remove spaces</p>
+<p>This step will be time-consuming due to the lengthy text.</p>
+<blockquote class="blockquote">
+<p>stop words:</p>
+</blockquote>
+<div class="cell" data-execution_count="17">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stopwords.words(<span class="st">'english'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>['i',
+ 'me',
+ 'my',
+ 'myself',
+ 'we',
+ 'our',
+ 'ours',
+ 'ourselves',
+ 'you',
+ "you're",
+ "you've",
+ "you'll",
+ "you'd",
+ 'your',
+ 'yours',
+ 'yourself',
+ 'yourselves',
+ 'he',
+ 'him',
+ 'his',
+ 'himself',
+ 'she',
+ "she's",
+ 'her',
+ 'hers',
+ 'herself',
+ 'it',
+ "it's",
+ 'its',
+ 'itself',
+ 'they',
+ 'them',
+ 'their',
+ 'theirs',
+ 'themselves',
+ 'what',
+ 'which',
+ 'who',
+ 'whom',
+ 'this',
+ 'that',
+ "that'll",
+ 'these',
+ 'those',
+ 'am',
+ 'is',
+ 'are',
+ 'was',
+ 'were',
+ 'be',
+ 'been',
+ 'being',
+ 'have',
+ 'has',
+ 'had',
+ 'having',
+ 'do',
+ 'does',
+ 'did',
+ 'doing',
+ 'a',
+ 'an',
+ 'the',
+ 'and',
+ 'but',
+ 'if',
+ 'or',
+ 'because',
+ 'as',
+ 'until',
+ 'while',
+ 'of',
+ 'at',
+ 'by',
+ 'for',
+ 'with',
+ 'about',
+ 'against',
+ 'between',
+ 'into',
+ 'through',
+ 'during',
+ 'before',
+ 'after',
+ 'above',
+ 'below',
+ 'to',
+ 'from',
+ 'up',
+ 'down',
+ 'in',
+ 'out',
+ 'on',
+ 'off',
+ 'over',
+ 'under',
+ 'again',
+ 'further',
+ 'then',
+ 'once',
+ 'here',
+ 'there',
+ 'when',
+ 'where',
+ 'why',
+ 'how',
+ 'all',
+ 'any',
+ 'both',
+ 'each',
+ 'few',
+ 'more',
+ 'most',
+ 'other',
+ 'some',
+ 'such',
+ 'no',
+ 'nor',
+ 'not',
+ 'only',
+ 'own',
+ 'same',
+ 'so',
+ 'than',
+ 'too',
+ 'very',
+ 's',
+ 't',
+ 'can',
+ 'will',
+ 'just',
+ 'don',
+ "don't",
+ 'should',
+ "should've",
+ 'now',
+ 'd',
+ 'll',
+ 'm',
+ 'o',
+ 're',
+ 've',
+ 'y',
+ 'ain',
+ 'aren',
+ "aren't",
+ 'couldn',
+ "couldn't",
+ 'didn',
+ "didn't",
+ 'doesn',
+ "doesn't",
+ 'hadn',
+ "hadn't",
+ 'hasn',
+ "hasn't",
+ 'haven',
+ "haven't",
+ 'isn',
+ "isn't",
+ 'ma',
+ 'mightn',
+ "mightn't",
+ 'mustn',
+ "mustn't",
+ 'needn',
+ "needn't",
+ 'shan',
+ "shan't",
+ 'shouldn',
+ "shouldn't",
+ 'wasn',
+ "wasn't",
+ 'weren',
+ "weren't",
+ 'won',
+ "won't",
+ 'wouldn',
+ "wouldn't"]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> transform(text):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove ponctuations</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">'[</span><span class="sc">%s</span><span class="st">]'</span> <span class="op">%</span> re.escape(string.punctuation)).sub(<span class="st">''</span>,text)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove numbers</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'[0-9]'</span>, <span class="st">' '</span>, text)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># To lower case</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> text.lower()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove stop words</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="st">' '</span>.join([i <span class="cf">for</span> i <span class="kw">in</span> text.split() <span class="cf">if</span> i <span class="kw">not</span> <span class="kw">in</span> stopwords.words(<span class="st">'english'</span>) <span class="kw">and</span> <span class="bu">len</span>(i)<span class="op">&gt;</span><span class="dv">2</span>])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove spaces</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> re.sub(<span class="vs">r'\s+'</span>, <span class="st">' '</span>, text)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(text)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Text_cleaned'</span>] <span class="op">=</span> data[<span class="st">'Text'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: transform(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="5">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before transform function:'</span>, end<span class="op">=</span><span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.iloc[<span class="dv">1</span>,<span class="dv">1</span>], end<span class="op">=</span><span class="st">'</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'After transform function:'</span>, end<span class="op">=</span><span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.iloc[<span class="dv">1</span>,<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before transform function:
+" The adopted strategy was the same as that used in prior years [] and is based on four exclusive queries that return  four  disjoint  citation  subsets The first query QPub_plain is based on a plaintext search in PubMed titles and s using keywords The  second  query  QPub_indexed relies on the PubMed indexing scheme using MeSH terms and results are made exclusive of the previous set The third one QWoS_restricted is based on a plaintext search in WoS restricted to the two research areas úMedical InformaticsĚ and úHealth Care Sciences  ServicesĚ The fourth query QWoS_filtered is based on the same plaintext search used in WoS but filtered by nonrelevant research areas eg Archeology Dance Zoology etc and the two research areas of the previous query It is of note that the two WoS queries select  only  nonPubMedindexed  papers that are supposed to be caught by the two PubMed queriesA  first  review  of  the  four  subsets  of retrieved  citations  was  performed  by  the two section editors to select  candidate best papers Following the IMIA Yearbook protocol these candidate best papers were then individually reviewed and rated by both section editors the chief editor of the Decision Support section and external reviewers from the international Medical Informatics community Based on the reviewersô ratings and comments the Yearbook editorial committee then selected the best papers of the year in the decision support domainIMIA Yearbook of Medical Informatics                                    IMIA and Ge Thieme Verlag KG 0cReview Results The    literature  search  has  been  performed on January   A total of  unique references were obtained distributed as follows  for QPub_plain  for QPub_indexed  for QWoS_restricted and  for QWoS_filtered yielding subtotals of  references from PubMed and  from WoS Compared to the previous year the global query retrieved   more  papers After  a  first  individual screening independently performed by both section editors based on the title and  of papers  not rejected by both section editors were discussed by the two editors to achieve a final selection of  candidate best  papers After  the  external  review  of these    s  the  editorial  committee finally selected three of them as best papers for  [ď] Table  They are discussed in the next section and summaries of their contents are available in the AppendixDiscussion and OutlookIn the first paper Hendriks  [] propose an approach to the modeling of clinical practice guidelines which certainly builds on already existing approaches but which is systematically conducted in order to be scalable and used to represent complex guidelines They promote the formalism of clinical decision trees CDTs as they are both clinically interpretable  by  healthcare  professionals and  computerinterpretable  thus  suitable for implementation in datadriven CDSSs The disambiguation of textual guidelines is supported first by the formal unequivocal specification of data items used as decision criteria using international coding systems to enforce interoperability and second by the representation of guideline knowledge as CDTs The method is applied to the Dutch breast cancer guidelines Sixty CDTs were built  involving  a  total  of    data  items among  which    could  not  be  linked  to standard terminologies The authors report the ambiguity of certain criteria which could be subjective or had multiple definitions The resulting knowledge base was implemented in a decision support application where it can be interactively browsed or automatically executed By modeling guidelines in such a way this work is a step forward in the sharing of encoded knowledgeIn the second paper KamiŇ°alińá  [] tackled the issues linked to the formalization of the medical processes used for managing chronic diseases and their execution in CDSSs They analyzed the decisionmaking dimensions of the therapeutic management of chronic diseases like those known to increase the cardiovascular risk and identified three basic levels therapy strategy dosage adaptation and intolerance management To handle these  different  aspects  consistently  they propose a formalism called extended Timed Transition Diagram eTTD With eTTDs they illustrate the multilevel and finegrained modeling required to capture the contents of arterial hypertension management guidelines This detailed demonstration on how procedural knowledge for hypertension management can be formalized to develop a CDSS could certainly be used in other medical domainsThe third paper by Khalifa  [] presents a conceptual and practical framework to help assess confidence in predictive tools GRASP  for  Grade  and Assess  Predictive Tools is both a method to look for evidence from the published literature and an analysis grid It standardizes the assessment of the available literature associated to a predictive tool and the grading of its level of proof Three phases of evaluation are considered i before the implementation of the tool to assess both its internal and external validity ii during the implementation to assess its potential effect and usability and iii after the implementation to assess its effectiveness and safety In each phase the level of evidence  can  be  assessed  from  the  study design A qualitative  summarizes the direction of evidence positive negative mixed This grid can be considered as similar to existing grids for instance the CONSORT statement for clinical trials However it gives a rigorous methodology for a critical appraisal of predictive tools and could be extended to all kind of CDSSs It might be a useful tool to extend the evidencebased culture in the field of medical informaticsBesides the three best papers selected for the  Decision  Support section  of  the   edition of the IMIA Yearbook several other works retrieved from the literature review deserve to be cited Some of them deal with the personalization of decisions Laleci   []  propose  a  scientific  and  technical approach to develop personalized care plans that comply with clinical practice guidelines for the management of complex polypathology situations Jafarpour  [] propose a solution to dynamically manage the conflicts that can rise in this type of complex contexts Ben Souissi  [] introduce the use of health  information  technology  involving multiple criteria decision to support the choice between antibiotics alternatives Interestingly other works promote the creation and sharing of operational knowledge bases as exemplified by Hendriks  [] Thus Huibers  [] transform the textual STOPPSTART criteria into unambiguous definitions mapped to  medical  terminologies  Canovas et  al [] formalize EUCAST expert rules as an ontology and production rules to detect antimicrobial therapies at risk of failure Mľller  [] propose an   diagnostic knowledge base that can compete with commercial ones Replacing humans is another topic of research and Spnig  [] work on two aspects to virtualize a doctor the automatic acquisition of data through sensors and speech recognition and the automation of diagnostic reasoning Rozenblum et al[] propose a machine learning method to generate clinically valid alerts to detect errors in prescriptions Acceptability  of  CDSS  is  another  key point Kannan  [] propose a method for a CDSS design to best meet a precisely specified and assessable user purpose Design alerts  may  also  avoid  rejection  of  CDSSs by caregivers Fernandes  [] created algorithms able to aggregate filter and reduce the notifications delivered to healthcare professionals Amrose et  al [] tried to understand in real life the impact of alerts on users and to find the actions they triggered Finally it is always interesting to obtain varied evaluation results of controversial CDSSs In this respect Kim  [] evaluated Watson for Oncology in thyroid carcinoma and reported a concordance rate with local practices considered as too low to adopt the tool As  evidenced  by  the  number  and  the variety of works around decision support research in the field is very active This yearôs selection highlighted pragmatic works that promote the transparency and sharing of the IMIA Yearbook of Medical Informatics 2020Duclos  0cTable     Best paper selection of s for the IMIA Yearbook of Medical Informatics  in the section 'Decision Support' The s are listed in alphabetical order of the first authorôs surname Section Decision Support\uf0a7  Hendriks MP Verbeek XAAM van Vegchel T van der Sangen MJC Strobbe LJA Merkus JWS Zonderland HM Smorenburg CH Jager A Siesling S Transformation of the National Breast Cancer Guideline Into DataDriven Clinical Decision Trees JCO Clin Cancer Inform \uf0a7\t KamiŇ°alińá\tA\tRiaĪo\tD\tKert\tS\tWelzer\tT\tNemec\tZlatolas\tL\tMultilevel\tmedical\tknowledge\tformalization\tto\tsupport\tmedical\tpractice for chronic diseases Data  Knowledge Engineering ď\uf0a7  Khalifa M Magrabi F Gallego B Developing a framework for evidencebased grading and assessment of predictive tools for clinical decision support BMC Med Inform Decis Mak  knowledge bases used by decision support tools as well as the grading of their utility The ultimate goal is that users could trust such tools to then use themAcknowledgementWe would like to thank all the present and past editorial boards of the IMIA Yearbook especially Martina Hutter and Adrien Ugon for their support as well as the reviewers for  their  participation  to  the  selection  of the  best  papers  for  the  Decision  Support section We cannot end this synopsis without a meaningful thought for our colleague and friend Vassilis  Koutkias  who  started  this year again to tackle the tasks of a Decision Support section coeditor but passed away in last December and unfortunately could not finishReferences  Jankovic I Chen JH Clinical Decision Support and Implications for the Clinician Burnout Crisis  Yearb Med Inform   Koutkias V Bouaud J Contributions on Clinical Decision Support from the  Literature Yearb Med Inform  Aug2811357  Hendriks MP Verbeek XAAM van Vegchel T van der Sangen MJC Strobbe LJA Merkus JWS  Transformation of the National Breast Cancer Guideline  Into  DataDriven  Clinical  Decision Trees JCO Clin Cancer Inform   KamiŇ°alińá A RiaĪo D Kert S Welzer T Nemec Zlatolas  L  Multilevel  medical  knowledge formalization  to  support  medical  practice  for chronic diseases Data  Knowledge Engineering ď  Khalifa  M  Magrabi  F  Gallego  B  Developing a  framework  for  evidencebased  grading  and assessment  of  predictive  tools  for  clinical  decision  support  BMC  Med  Inform  Decis  Mak    Laleci  GB Yuksel  M  Sarigul  B Arvanitis TN Lindman P Chen R  A Collaborative Platform for Management of Chronic Diseases via GuidelineDriven  Individualized  Care  Plans  Comput Struct Biotechnol J ď   Jafarpour  B  Raza Abidi  S Van  Woensel  W Raza Abidi  SS  Executiontime  integration  of clinical  practice  guidelines  to  provide  decision support for comorbid conditions Artif Intell Med   Ben Souissi S Abed M El Hiki L Fortemps P Pirlot  M  PARS  a  system  combining  semantic technologies with multiple criteria decision aiding for supporting antibiotic prescriptions J Biomed Inform   Huibers  CJA  Sallevelt  BTGM  de  Groot  DA Boer MJ van Campen JPCM Davids CJ  Conversion  of  STOPPSTART  version    into coded algorithms for software implementation A multidisciplinary consensus procedure Int J Med Inform  C°novasSegura B Morales A Juarez JM Campos M Palacios F Impact of expert knowledge on the detection of patients at risk of antimicrobial therapy failure by clinical decision support systems J Biomed Inform  Mľller L Gangadharaiah R Klein SC Perry J Bernstein G Nurkse D  An   access medical knowledge base for community driven diagnostic decision support system development BMC Med Inform Decis Mak  Spnig  S  EmbergerKlein A  Sowa  JP  Canbay A Menrad K Heider D The virtual doctor An interactive clinicaldecisionsupport system based on deep learning for noninvasive prediction of diabetes Artif Intell Med  Rozenblum R RodriguezMonguio R Volk LA Forsythe KJ Myers S McGurrin M  Using a Machine Learning System to Identify and Prevent Medication Prescribing Errors A Clinical and Cost Analysis Evaluation Jt Comm J Qual Patient Saf   Kannan V  Basit  MA  Bajaj  P  Carrington AR Donahue IB Flahaven EL  User stories as lightweight requirements for agile clinical decision support development J Am Med Inform Assoc  Fernandes CO Miles S Lucena CJP Cowan D Artificial  Intelligence Technologies  for  Coping with Alarm  Fatigue  in  Hospital  Environments Because  of  Sensory  Overload Algorithm  Development  and Validation  J  Med  Internet  Res 20192111e15406 Amroze A  Field TS  Fouayzi  H  Sundaresan D  Burns  L  Garber  L  et  al  Use  of  Electronic Health Record Access and Audit Logs to Identify Physician Actions Following Noninterruptive Alert  ing Descriptive Study JMIR Med Inform 201971e12650 Kim M Kim BH Kim JM Kim EH Kim K Pak K  Concordance in postsurgical radioactive iodine therapy recommendations between Watson for  Oncology  and  clinical  practice  in  patients with  differentiated  thyroid  carcinoma Cancer Correspondence toPr Catherine DuclosLIMICS INSERM Facult© L©onard de Vinci rue Marcel Cachin  Bobigny FranceEmail catherineduclosaphpfr IMIA Yearbook of Medical Informatics 2020Pragmatic Considerations on Clinical Decision Support from the  Literature 0cAppendix Content Summaries of Best Papers for the Decision Support Section of the  IMIA YearbookHendriks MP Verbeek XAAM van Vegchel T van der Sangen MJC Strobbe LJA Merkus JWS Zonderland HM Smorenburg CH Jager A Siesling STransformation of the National Breast Cancer Guideline into datadriven clinical decision treesJCO Clin Cancer Inform  May3114Since  clinical  practice  guidelines  are  still narrative and described in large textual documents the aim of this work was to model complex guidelines as datadriven clinical decision trees CDTs that could be still humaninterpretable while computerinterpretable for implementation in decision support systems The Dutch national breast cancer guidelines were translated into CDTs Data items  which  characterize  the  patient  and the tumor and represent decisional criteria were encoded unambiguously using existing classifications and coding systems related to breast cancer when feasible In total  CDTs  were  necessary  to  cover  the  whole guidelines driven by  data items Of all data items   could be coded using existing classification and coding systems All  CDTs represented  unique patient subpopulations Complex guidelines could be transformed as systematically constructed modular datadriven CDTs that are clinically interpretable and executable in a decision support applicationKamiŇ°alińá A RiaĪo D Kert S Welzer T Nemec Zlatolas LMultilevel medical knowledge formalization to support medical practice for chronic diseasesData  Knowledge Engineering  ďThis research is focused on knowledge representation to support the medical processes involved in chronic diseases management which can be viewed as a procedural and sequential  application  of  knowledge An intuitive easy and effective mechanism for medical  knowledge  formalization  is  proposed through a formalism called extended Timed Transition  Diagram  eTTD This formalism allows for the consistent representation of three basic levels of decision making that should be taken into account in the prescription and adaptation of longterm treatment therapy strategy dosage and intolerances The methodology can be manually applied to build eTTDs from clinical practice guidelines eTTDs implementation is demonstrated by modeling clinical practice guidelines for the therapeutic management of arterial hypertension The obtained models can be used as a baseline framework for the development of decision support systems involving medical proceduresKhalifa M Magrabi F Gallego BDeveloping a framework for evidencebased grading and assessment of predictive tools for clinical decision supportBMC Med Inform Decis Mak  Oct Deciding to choose a clinical predictive tool in clinical practice should be guided by its correctly assessed effectiveness The objective of this work is to developp a conceptual and practical framework to Grade and Assess Predictive tools GRASP and provide clinicians with a standardised evidencebased system to support their search for and selection of efficient predictive tools The GRASP framework grades predictive tools based on published evidence across three dimensions phase of evaluation level of evidence and direction of evidence The final grade of the tool is based on the phase of evaluation that gets  the  hightest  grade  supported  by  the highest level of positive or mixed evidence that  supports  a  positive   This framework was successfully applied to five predictive  tools  GRASP  report  updates could be a way to maintain a data base that documents the evidence of predictive tools IMIA Yearbook of Medical Informatics 2020Duclos  0c"
+
+After transform function:
+adopted strategy used prior years based four exclusive queries return four disjoint citation subsets first query qpubplain based plaintext search pubmed titles using keywords second query qpubindexed relies pubmed indexing scheme using mesh terms results made exclusive previous set third one qwosrestricted based plaintext search wos restricted two research areas úmedical informaticsě úhealth care sciences servicesě fourth query qwosfiltered based plaintext search used wos filtered nonrelevant research areas archeology dance zoology etc two research areas previous query note two wos queries select nonpubmedindexed papers supposed caught two pubmed queriesa first review four subsets retrieved citations performed two section editors select candidate best papers following imia yearbook protocol candidate best papers individually reviewed rated section editors chief editor decision support section external reviewers international medical informatics community based reviewersô ratings comments yearbook editorial committee selected best papers year decision support domainimia yearbook medical informatics imia thieme verlag creview results literature search performed january total unique references obtained distributed follows qpubplain qpubindexed qwosrestricted qwosfiltered yielding subtotals references pubmed wos compared previous year global query retrieved papers first individual screening independently performed section editors based title papers rejected section editors discussed two editors achieve final selection candidate best papers external review editorial committee finally selected three best papers table discussed next section summaries contents available appendixdiscussion outlookin first paper hendriks propose approach modeling clinical practice guidelines certainly builds already existing approaches systematically conducted order scalable used represent complex guidelines promote formalism clinical decision trees cdts clinically interpretable healthcare professionals computerinterpretable thus suitable implementation datadriven cdsss disambiguation textual guidelines supported first formal unequivocal specification data items used decision criteria using international coding systems enforce interoperability second representation guideline knowledge cdts method applied dutch breast cancer guidelines sixty cdts built involving total data items among could linked standard terminologies authors report ambiguity certain criteria could subjective multiple definitions resulting knowledge base implemented decision support application interactively browsed automatically executed modeling guidelines way work step forward sharing encoded knowledgein second paper kamiň°alińá tackled issues linked formalization medical processes used managing chronic diseases execution cdsss analyzed decisionmaking dimensions therapeutic management chronic diseases like known increase cardiovascular risk identified three basic levels therapy strategy dosage adaptation intolerance management handle different aspects consistently propose formalism called extended timed transition diagram ettd ettds illustrate multilevel finegrained modeling required capture contents arterial hypertension management guidelines detailed demonstration procedural knowledge hypertension management formalized develop cdss could certainly used medical domainsthe third paper khalifa presents conceptual practical framework help assess confidence predictive tools grasp grade assess predictive tools method look evidence published literature analysis grid standardizes assessment available literature associated predictive tool grading level proof three phases evaluation considered implementation tool assess internal external validity implementation assess potential effect usability iii implementation assess effectiveness safety phase level evidence assessed study design qualitative summarizes direction evidence positive negative mixed grid considered similar existing grids instance consort statement clinical trials however gives rigorous methodology critical appraisal predictive tools could extended kind cdsss might useful tool extend evidencebased culture field medical informaticsbesides three best papers selected decision support section edition imia yearbook several works retrieved literature review deserve cited deal personalization decisions laleci propose scientific technical approach develop personalized care plans comply clinical practice guidelines management complex polypathology situations jafarpour propose solution dynamically manage conflicts rise type complex contexts ben souissi introduce use health information technology involving multiple criteria decision support choice antibiotics alternatives interestingly works promote creation sharing operational knowledge bases exemplified hendriks thus huibers transform textual stoppstart criteria unambiguous definitions mapped medical terminologies canovas formalize eucast expert rules ontology production rules detect antimicrobial therapies risk failure mľller propose diagnostic knowledge base compete commercial ones replacing humans another topic research spnig work two aspects virtualize doctor automatic acquisition data sensors speech recognition automation diagnostic reasoning rozenblum propose machine learning method generate clinically valid alerts detect errors prescriptions acceptability cdss another key point kannan propose method cdss design best meet precisely specified assessable user purpose design alerts may also avoid rejection cdsss caregivers fernandes created algorithms able aggregate filter reduce notifications delivered healthcare professionals amrose tried understand real life impact alerts users find actions triggered finally always interesting obtain varied evaluation results controversial cdsss respect kim evaluated watson oncology thyroid carcinoma reported concordance rate local practices considered low adopt tool evidenced number variety works around decision support research field active yearôs selection highlighted pragmatic works promote transparency sharing imia yearbook medical informatics duclos ctable best paper selection imia yearbook medical informatics section decision support listed alphabetical order first authorôs surname section decision supportuf hendriks verbeek xaam van vegchel van der sangen mjc strobbe lja merkus jws zonderland smorenburg jager siesling transformation national breast cancer guideline datadriven clinical decision trees jco clin cancer inform kamiň°alińátatriaīotdtkerttstwelzertttnemectzlatolastltmultileveltmedicaltknowledgetformalizationttotsupporttmedicaltpractice chronic diseases data knowledge engineering ďuf khalifa magrabi gallego developing framework evidencebased grading assessment predictive tools clinical decision support bmc med inform decis mak knowledge bases used decision support tools well grading utility ultimate goal users could trust tools use themacknowledgementwe would like thank present past editorial boards imia yearbook especially martina hutter adrien ugon support well reviewers participation selection best papers decision support section cannot end synopsis without meaningful thought colleague friend vassilis koutkias started year tackle tasks decision support section coeditor passed away last december unfortunately could finishreferences jankovic chen clinical decision support implications clinician burnout crisis yearb med inform koutkias bouaud contributions clinical decision support literature yearb med inform aug hendriks verbeek xaam van vegchel van der sangen mjc strobbe lja merkus jws transformation national breast cancer guideline datadriven clinical decision trees jco clin cancer inform kamiň°alińá riaīo kert welzer nemec zlatolas multilevel medical knowledge formalization support medical practice chronic diseases data knowledge engineering khalifa magrabi gallego developing framework evidencebased grading assessment predictive tools clinical decision support bmc med inform decis mak laleci yuksel sarigul arvanitis lindman chen collaborative platform management chronic diseases via guidelinedriven individualized care plans comput struct biotechnol jafarpour raza abidi van woensel raza abidi executiontime integration clinical practice guidelines provide decision support comorbid conditions artif intell med ben souissi abed hiki fortemps pirlot pars system combining semantic technologies multiple criteria decision aiding supporting antibiotic prescriptions biomed inform huibers cja sallevelt btgm groot boer van campen jpcm davids conversion stoppstart version coded algorithms software implementation multidisciplinary consensus procedure int med inform c°novassegura morales juarez campos palacios impact expert knowledge detection patients risk antimicrobial therapy failure clinical decision support systems biomed inform mľller gangadharaiah klein perry bernstein nurkse access medical knowledge base community driven diagnostic decision support system development bmc med inform decis mak spnig embergerklein sowa canbay menrad heider virtual doctor interactive clinicaldecisionsupport system based deep learning noninvasive prediction diabetes artif intell med rozenblum rodriguezmonguio volk forsythe myers mcgurrin using machine learning system identify prevent medication prescribing errors clinical cost analysis evaluation comm qual patient saf kannan basit bajaj carrington donahue flahaven user stories lightweight requirements agile clinical decision support development med inform assoc fernandes miles lucena cjp cowan artificial intelligence technologies coping alarm fatigue hospital environments sensory overload algorithm development validation med internet res amroze field fouayzi sundaresan burns garber use electronic health record access audit logs identify physician actions following noninterruptive alert ing descriptive study jmir med inform kim kim kim kim kim pak concordance postsurgical radioactive iodine therapy recommendations watson oncology clinical practice patients differentiated thyroid carcinoma cancer correspondence topr catherine ducloslimics inserm facult© l©onard vinci rue marcel cachin bobigny franceemail catherineduclosaphpfr imia yearbook medical informatics pragmatic considerations clinical decision support literature cappendix content summaries best papers decision support section imia yearbookhendriks verbeek xaam van vegchel van der sangen mjc strobbe lja merkus jws zonderland smorenburg jager siesling stransformation national breast cancer guideline datadriven clinical decision treesjco clin cancer inform may since clinical practice guidelines still narrative described large textual documents aim work model complex guidelines datadriven clinical decision trees cdts could still humaninterpretable computerinterpretable implementation decision support systems dutch national breast cancer guidelines translated cdts data items characterize patient tumor represent decisional criteria encoded unambiguously using existing classifications coding systems related breast cancer feasible total cdts necessary cover whole guidelines driven data items data items could coded using existing classification coding systems cdts represented unique patient subpopulations complex guidelines could transformed systematically constructed modular datadriven cdts clinically interpretable executable decision support applicationkamiň°alińá riaīo kert welzer nemec zlatolas lmultilevel medical knowledge formalization support medical practice chronic diseasesdata knowledge engineering ďthis research focused knowledge representation support medical processes involved chronic diseases management viewed procedural sequential application knowledge intuitive easy effective mechanism medical knowledge formalization proposed formalism called extended timed transition diagram ettd formalism allows consistent representation three basic levels decision making taken account prescription adaptation longterm treatment therapy strategy dosage intolerances methodology manually applied build ettds clinical practice guidelines ettds implementation demonstrated modeling clinical practice guidelines therapeutic management arterial hypertension obtained models used baseline framework development decision support systems involving medical procedureskhalifa magrabi gallego bdeveloping framework evidencebased grading assessment predictive tools clinical decision supportbmc med inform decis mak oct deciding choose clinical predictive tool clinical practice guided correctly assessed effectiveness objective work developp conceptual practical framework grade assess predictive tools grasp provide clinicians standardised evidencebased system support search selection efficient predictive tools grasp framework grades predictive tools based published evidence across three dimensions phase evaluation level evidence direction evidence final grade tool based phase evaluation gets hightest grade supported highest level positive mixed evidence supports positive framework successfully applied five predictive tools grasp report updates could way maintain data base documents evidence predictive tools imia yearbook medical informatics duclos</code></pre>
+</div>
+</div>
+</section>
+<section id="wordcloud-plots" class="level3">
+<h3 class="anchored" data-anchor-id="wordcloud-plots">WordCloud plots</h3>
+<p>I can’t resist to draw some wordcloud.</p>
+<p>A <strong>word cloud</strong> plot is a popular visualization technique that displays the most frequently occurring words in a text corpus. It visually represents the importance of words by varying the size of each word according to its frequency, offering a quick and insightful overview of the most prominent terms within the given dataset.</p>
+<p>With all the type of cancer:</p>
+<div class="cell" data-execution_count="6">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">' '</span>.join(i <span class="cf">for</span> i <span class="kw">in</span> data[<span class="st">'Text_cleaned'</span>])</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> text.split()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>word_counts_dict<span class="op">=</span>collections.Counter(words)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>wordcloud<span class="op">=</span>WordCloud(width<span class="op">=</span><span class="dv">1200</span>, height<span class="op">=</span><span class="dv">800</span>, background_color<span class="op">=</span><span class="st">'white'</span>, max_words<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>wordcloud.generate_from_frequencies(word_counts_dict)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Thyroid cancer:</p>
+<div class="cell" data-execution_count="7">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">' '</span>.join(i <span class="cf">for</span> i <span class="kw">in</span> data[data[<span class="st">'Type'</span>]<span class="op">==</span><span class="st">'Thyroid_Cancer'</span>][<span class="st">'Text_cleaned'</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> text.split()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>word_counts_dict<span class="op">=</span>collections.Counter(words)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>wordcloud<span class="op">=</span>WordCloud(width<span class="op">=</span><span class="dv">1200</span>, height<span class="op">=</span><span class="dv">800</span>, background_color<span class="op">=</span><span class="st">'white'</span>, max_words<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>wordcloud.generate_from_frequencies(word_counts_dict)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Cancer of colon:</p>
+<div class="cell" data-execution_count="8">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">' '</span>.join(i <span class="cf">for</span> i <span class="kw">in</span> data[data[<span class="st">'Type'</span>]<span class="op">==</span><span class="st">'Colon_Cancer'</span>][<span class="st">'Text_cleaned'</span>])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> text.split()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>word_counts_dict<span class="op">=</span>collections.Counter(words)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>wordcloud<span class="op">=</span>WordCloud(width<span class="op">=</span><span class="dv">1200</span>, height<span class="op">=</span><span class="dv">800</span>, background_color<span class="op">=</span><span class="st">'white'</span>, max_words<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>wordcloud.generate_from_frequencies(word_counts_dict)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Lung cancer:</p>
+<div class="cell" data-execution_count="9">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">' '</span>.join(i <span class="cf">for</span> i <span class="kw">in</span> data[data[<span class="st">'Type'</span>]<span class="op">==</span><span class="st">'Lung_Cancer'</span>][<span class="st">'Text_cleaned'</span>])</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> text.split()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>word_counts_dict<span class="op">=</span>collections.Counter(words)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>wordcloud<span class="op">=</span>WordCloud(width<span class="op">=</span><span class="dv">1200</span>, height<span class="op">=</span><span class="dv">800</span>, background_color<span class="op">=</span><span class="st">'white'</span>, max_words<span class="op">=</span><span class="dv">200</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>wordcloud.generate_from_frequencies(word_counts_dict)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>As we can see on the previous plot, some words like Cancer, cell and patient are frequently used with all the cancer type. I have to use more than 200 words if I want a good accuracy of my model.</p>
+</blockquote>
+</section>
+<section id="modelization" class="level3">
+<h3 class="anchored" data-anchor-id="modelization">Modelization</h3>
+<p>Before setting the model, I splitted my data in two: - train: to train the model - test: to test the accuracy of the model.</p>
+<p>After that, we’ll use this technics: - Tokenizer: to transform list of words into list of integers as keras is dealing only with numbers. - Padding: to transform list of numbers into 2d numpy array with the same size (longest sequence in the list) - Label encoder: to transform labels (cancer type) to integers</p>
+<div class="cell" data-execution_count="10">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>label_encoder <span class="op">=</span> LabelEncoder()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>x_train, x_test, y_train, y_test <span class="op">=</span>train_test_split(data[<span class="st">'Text_cleaned'</span>], data[<span class="st">'Type'</span>], test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> Tokenizer(num_words<span class="op">=</span><span class="dv">5000</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>tokenizer.fit_on_texts(data[<span class="st">'Text_cleaned'</span>])</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>max_seq_length <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>x_train_seq <span class="op">=</span> tokenizer.texts_to_sequences(x_train)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>x_train_seq <span class="op">=</span> pad_sequences(x_train_seq, maxlen<span class="op">=</span>max_seq_length)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>x_test_seq <span class="op">=</span> tokenizer.texts_to_sequences(x_test)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>x_test_seq <span class="op">=</span> pad_sequences(x_test_seq, maxlen<span class="op">=</span>max_seq_length)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>y_train_enc <span class="op">=</span> label_encoder.fit_transform(y_train)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>y_test_enc <span class="op">=</span> label_encoder.fit_transform(y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>As input, the first layer will be an embedding with: - input dimensions of 5000 as we’ll use the 5000 words most frequent - output dimensions are 256 - input length is 1000 (sentence’s length is 1000)</p>
+<p>The model starts with an Embedding layer, followed by a Dropout layer to prevent overfitting.</p>
+<p>Next, a Conv1D layer with MaxPooling1D is used to capture local patterns in the text. A Bidirectional LSTM layer is incorporated to capture contextual information from both directions. BatchNormalization and additional Dropout layers are added to improve training stability and generalization.</p>
+<p>Finally, the model has a dense output layer with softmax activation for multi-class classification. The model is compiled using the Adam optimizer with a learning rate of 1e-4 and sparse categorical cross-entropy loss for the specified metrics of accuracy.</p>
+<div class="cell" data-execution_count="11">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span>Sequential()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model.add(Embedding(input_dim<span class="op">=</span><span class="dv">5000</span>, output_dim<span class="op">=</span><span class="dv">256</span>, input_length<span class="op">=</span><span class="dv">1000</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>model.add(Dropout(<span class="fl">0.2</span>))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>model.add(Conv1D(filters<span class="op">=</span><span class="dv">64</span>, kernel_size<span class="op">=</span><span class="dv">3</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling1D(pool_size<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>model.add(Bidirectional(LSTM(units<span class="op">=</span><span class="dv">64</span>)))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>model.add(BatchNormalization())</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>model.add(Dropout(<span class="fl">0.2</span>))</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>model.add(Dense(units<span class="op">=</span><span class="dv">128</span>, activation<span class="op">=</span><span class="st">'selu'</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>model.add(BatchNormalization())</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>model.add(Dropout(<span class="fl">0.2</span>))</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>model.add(Dense(<span class="dv">3</span>, activation<span class="op">=</span><span class="st">"softmax"</span>))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>model.summary()</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span>Adam(learning_rate<span class="op">=</span><span class="fl">1e-4</span>),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>              loss<span class="op">=</span><span class="st">'sparse_categorical_crossentropy'</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>              metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ embedding (Embedding)       (None, 1000, 256)         1280000   
+                                                                 
+ dropout (Dropout)           (None, 1000, 256)         0         
+                                                                 
+ conv1d (Conv1D)             (None, 998, 64)           49216     
+                                                                 
+ max_pooling1d (MaxPooling1D  (None, 499, 64)          0         
+ )                                                               
+                                                                 
+ bidirectional (Bidirectiona  (None, 128)              66048     
+ l)                                                              
+                                                                 
+ batch_normalization (BatchN  (None, 128)              512       
+ ormalization)                                                   
+                                                                 
+ dropout_1 (Dropout)         (None, 128)               0         
+                                                                 
+ dense (Dense)               (None, 128)               16512     
+                                                                 
+ batch_normalization_1 (Batc  (None, 128)              512       
+ hNormalization)                                                 
+                                                                 
+ dropout_2 (Dropout)         (None, 128)               0         
+                                                                 
+ dense_1 (Dense)             (None, 3)                 387       
+                                                                 
+=================================================================
+Total params: 1,413,187
+Trainable params: 1,412,675
+Non-trainable params: 512
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>y_train_enc <span class="op">=</span> y_train_enc.astype(<span class="bu">float</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> model.fit(x_train_seq, y_train_enc, validation_split<span class="op">=</span><span class="fl">0.2</span>, batch_size<span class="op">=</span><span class="dv">100</span>, epochs<span class="op">=</span><span class="dv">15</span>, verbose<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/15</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-07-31 11:50:45.465002: W tensorflow/tsl/platform/profile_utils/cpu_utils.cc:128] Failed to get CPU frequency: 0 Hz</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>49/49 [==============================] - 26s 497ms/step - loss: 1.0103 - accuracy: 0.5772 - val_loss: 1.0668 - val_accuracy: 0.4868
+Epoch 2/15
+49/49 [==============================] - 27s 550ms/step - loss: 0.5593 - accuracy: 0.7779 - val_loss: 1.0341 - val_accuracy: 0.3927
+Epoch 3/15
+49/49 [==============================] - 27s 559ms/step - loss: 0.2615 - accuracy: 0.9147 - val_loss: 0.9631 - val_accuracy: 0.4909
+Epoch 4/15
+49/49 [==============================] - 26s 527ms/step - loss: 0.1250 - accuracy: 0.9649 - val_loss: 0.8665 - val_accuracy: 0.6832
+Epoch 5/15
+49/49 [==============================] - 25s 508ms/step - loss: 0.0757 - accuracy: 0.9802 - val_loss: 0.7447 - val_accuracy: 0.8177
+Epoch 6/15
+49/49 [==============================] - 24s 483ms/step - loss: 0.0532 - accuracy: 0.9862 - val_loss: 0.5993 - val_accuracy: 0.9307
+Epoch 7/15
+49/49 [==============================] - 26s 526ms/step - loss: 0.0418 - accuracy: 0.9884 - val_loss: 0.4467 - val_accuracy: 0.9827
+Epoch 8/15
+49/49 [==============================] - 28s 569ms/step - loss: 0.0331 - accuracy: 0.9915 - val_loss: 0.3032 - val_accuracy: 0.9934
+Epoch 9/15
+49/49 [==============================] - 26s 535ms/step - loss: 0.0252 - accuracy: 0.9936 - val_loss: 0.1931 - val_accuracy: 0.9926
+Epoch 10/15
+49/49 [==============================] - 27s 545ms/step - loss: 0.0230 - accuracy: 0.9936 - val_loss: 0.1076 - val_accuracy: 0.9959
+Epoch 11/15
+49/49 [==============================] - 26s 525ms/step - loss: 0.0228 - accuracy: 0.9938 - val_loss: 0.0586 - val_accuracy: 0.9934
+Epoch 12/15
+49/49 [==============================] - 27s 560ms/step - loss: 0.0231 - accuracy: 0.9934 - val_loss: 0.0428 - val_accuracy: 0.9942
+Epoch 13/15
+49/49 [==============================] - 27s 556ms/step - loss: 0.0271 - accuracy: 0.9932 - val_loss: 0.0228 - val_accuracy: 0.9950
+Epoch 14/15
+49/49 [==============================] - 26s 524ms/step - loss: 0.0176 - accuracy: 0.9955 - val_loss: 0.0266 - val_accuracy: 0.9942
+Epoch 15/15
+49/49 [==============================] - 26s 536ms/step - loss: 0.0165 - accuracy: 0.9932 - val_loss: 0.0099 - val_accuracy: 0.9975</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the training and validation accuracy</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>training_accuracy <span class="op">=</span> history.history[<span class="st">'accuracy'</span>]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>validation_accuracy <span class="op">=</span> history.history[<span class="st">'val_accuracy'</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the training and validation loss</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>training_loss <span class="op">=</span> history.history[<span class="st">'loss'</span>]</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>validation_loss <span class="op">=</span> history.history[<span class="st">'val_loss'</span>]</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the accuracy</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.plot(training_accuracy, label<span class="op">=</span><span class="st">'Training Accuracy'</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.plot(validation_accuracy, label<span class="op">=</span><span class="st">'Validation Accuracy'</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training and Validation Accuracy'</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the loss</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>plt.plot(training_loss, label<span class="op">=</span><span class="st">'Training Loss'</span>)</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>plt.plot(validation_loss, label<span class="op">=</span><span class="st">'Validation Loss'</span>)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training and Validation Loss'</span>)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="accuracy-of-trained-model" class="level3">
+<h3 class="anchored" data-anchor-id="accuracy-of-trained-model">Accuracy of trained model:</h3>
+<p>All right we have trained our model, now let’s apply it to the test dataset and display the accuracy:</p>
+<div class="cell" data-execution_count="14">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> model.evaluate(x_test_seq, y_test_enc)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy of the trained model: </span><span class="sc">{</span>(<span class="dv">100</span><span class="op">*</span>accuracy[<span class="dv">1</span>])<span class="sc">:.2f}</span><span class="ss"> %"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>48/48 [==============================] - 2s 36ms/step - loss: 0.0144 - accuracy: 0.9941
+Accuracy of the trained model: 99.41 %</code></pre>
+</div>
+</div>
+<section id="confusion-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h4>
+<p>A confusion matrix is a fundamental tool in the field of machine learning and classification tasks.</p>
+<p>It provides a comprehensive and intuitive representation of the performance of a classification model by comparing its predicted class labels with the actual ground truth labels</p>
+<div class="cell" data-execution_count="16">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> ConfusionMatrixDisplay</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>y_prediction <span class="op">=</span> np.argmax(model.predict(x_test_seq), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>conf_matrix <span class="op">=</span> confusion_matrix(y_true<span class="op">=</span>y_test_enc, y_pred<span class="op">=</span>y_prediction)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>class_labels <span class="op">=</span> [<span class="st">'Thyroid_Cancer'</span>, <span class="st">'Colon_Cancer'</span>, <span class="st">'Lung_Cancer'</span>]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay(conf_matrix, display_labels<span class="op">=</span>class_labels).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>48/48 [==============================] - 2s 35ms/step</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x2d40f0460&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cancer text classification_files/figure-html/cell-17-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Website made with <a href="https://quarto.org/">Quarto</a></div>   
+  </div>
+</footer>
+
+
+
+</body></html>

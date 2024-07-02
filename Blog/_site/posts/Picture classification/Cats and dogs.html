@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jamel Belgacem">
+<meta name="dcterms.date" content="2023-07-27">
+
+<title>Jamel Belgcem - Picture classification (cat or dog)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Jamel Belgcem</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:jamelbelgacem@hotmail.com"><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JamBelg"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/jamel-belgacem-289606a7/"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Picture classification (cat or dog)</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Deep learning</div>
+                <div class="quarto-category">Picture classification</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Jamel Belgacem </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 27, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Deep learning is a subset of artificial intelligence that involves training neural networks to learn and recognize patterns from vast amounts of data. One of its prominent applications is image classification, where deep learning models can automatically identify objects and features within images.</p>
+<p>In this tutorial I will use a keras neural network to try to predict the class of a picture (Cat / Dog).</p>
+<p>You can download the dataset from <a href="www.kaggle.com">Kaggle</a>.</p>
+<p>Keras is an open-source deep learning framework that provides a user-friendly interface to build, train, and deploy neural networks. It is designed to be simple and intuitive, making it an ideal choice for beginners and researchers alike.</p>
+<section id="import-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="import-libraries">Import libraries</h3>
+<div class="cell" data-execution_count="1">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Keras</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.utils <span class="im">import</span> image_dataset_from_directory</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.models <span class="im">import</span> Sequential</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.layers <span class="im">import</span> Flatten, Dense</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.callbacks <span class="im">import</span> ModelCheckpoint, EarlyStopping</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.preprocessing.image <span class="im">import</span> ImageDataGenerator</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.utils <span class="im">import</span> load_img, img_to_array</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-trained VGG16 model</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.applications.vgg16 <span class="im">import</span> VGG16</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, confusion_matrix, ConfusionMatrixDisplay</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Download picture from URL on temporary folder</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tempfile</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="read-data" class="level3">
+<h3 class="anchored" data-anchor-id="read-data">Read data</h3>
+<p>The dataset is composed from from two folders (train and test), and each of this folder contains pictures already classed in two folders (cats and dogs)</p>
+<p>To read the data, we’ll use the function <a href="tensorflow.org/api_docs/python/tf/keras/utils/image_dataset_from_directory">image_dataset_from_directory</a> of Keras.</p>
+<p>We give simply the path of the pictures and it generates a tensorflow datset.</p>
+<p>Some arguments can be passed as the picture size (by defalut 256,256) and the size of the batches.</p>
+<div class="cell" data-execution_count="2">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train_dir <span class="op">=</span> <span class="st">'data/train'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test_dir <span class="op">=</span> <span class="st">'data/test'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>seed_train_validation <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>train_dataset <span class="op">=</span> image_dataset_from_directory(train_dir, image_size<span class="op">=</span>(<span class="dv">128</span>, <span class="dv">128</span>), batch_size<span class="op">=</span><span class="dv">32</span>, validation_split<span class="op">=</span><span class="fl">0.2</span>, subset<span class="op">=</span><span class="st">'training'</span>, seed<span class="op">=</span>seed_train_validation)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>validation_dataset <span class="op">=</span> image_dataset_from_directory(train_dir, image_size<span class="op">=</span>(<span class="dv">128</span>, <span class="dv">128</span>), batch_size<span class="op">=</span><span class="dv">32</span>, validation_split<span class="op">=</span><span class="fl">0.2</span>, subset<span class="op">=</span><span class="st">'validation'</span>, seed<span class="op">=</span>seed_train_validation)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>test_dataset <span class="op">=</span> image_dataset_from_directory(test_dir, image_size<span class="op">=</span>(<span class="dv">128</span>, <span class="dv">128</span>), batch_size<span class="op">=</span><span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 557 files belonging to 2 classes.
+Using 446 files for training.
+Found 557 files belonging to 2 classes.
+Using 111 files for validation.
+Found 140 files belonging to 2 classes.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># building neural networks</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Conv layer 1:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    keras.layers.Conv2D(<span class="dv">256</span>, (<span class="dv">3</span>, <span class="dv">3</span>), input_shape<span class="op">=</span>(<span class="dv">128</span>,<span class="dv">128</span>,<span class="dv">3</span>), activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    keras.layers.BatchNormalization(),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    keras.layers.MaxPooling2D(pool_size <span class="op">=</span> (<span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Conv layer 2:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    keras.layers.Conv2D(<span class="dv">128</span>, (<span class="dv">3</span>, <span class="dv">3</span>), activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    keras.layers.BatchNormalization(),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    keras.layers.MaxPooling2D(pool_size <span class="op">=</span> (<span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Conv layer 3:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    keras.layers.Conv2D(<span class="dv">64</span>, (<span class="dv">3</span>, <span class="dv">3</span>), activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    keras.layers.BatchNormalization(),</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    keras.layers.MaxPooling2D(pool_size <span class="op">=</span> (<span class="dv">2</span>, <span class="dv">2</span>)),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    keras.layers.Flatten(),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fully connected layers:</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units <span class="op">=</span> <span class="dv">128</span>, activation <span class="op">=</span> <span class="st">'relu'</span>),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(units <span class="op">=</span><span class="dv">1</span>, activation <span class="op">=</span> <span class="st">'sigmoid'</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer <span class="op">=</span> keras.optimizers.Adam(learning_rate<span class="op">=</span><span class="fl">0.0001</span>), loss <span class="op">=</span> <span class="st">'binary_crossentropy'</span>, metrics <span class="op">=</span><span class="st">'accuracy'</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 126, 126, 256)     7168      
+                                                                 
+ batch_normalization (BatchN  (None, 126, 126, 256)    1024      
+ ormalization)                                                   
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 63, 63, 256)      0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 61, 61, 128)       295040    
+                                                                 
+ batch_normalization_1 (Batc  (None, 61, 61, 128)      512       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 30, 30, 128)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 28, 28, 64)        73792     
+                                                                 
+ batch_normalization_2 (Batc  (None, 28, 28, 64)       256       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 14, 14, 64)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 12544)             0         
+                                                                 
+ dense (Dense)               (None, 128)               1605760   
+                                                                 
+ dense_1 (Dense)             (None, 1)                 129       
+                                                                 
+=================================================================
+Total params: 1,983,681
+Trainable params: 1,982,785
+Non-trainable params: 896
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logs <span class="op">=</span> model.fit(train_dataset, epochs<span class="op">=</span><span class="dv">10</span>, validation_data<span class="op">=</span>validation_dataset,validation_steps<span class="op">=</span><span class="dv">2000</span><span class="op">/</span><span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/10</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-07-24 16:15:23.623191: W tensorflow/tsl/platform/profile_utils/cpu_utils.cc:128] Failed to get CPU frequency: 0 Hz</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>14/14 [==============================] - ETA: 0s - loss: 1.0300 - accuracy: 0.5426WARNING:tensorflow:Your input ran out of data; interrupting training. Make sure that your dataset or generator can generate at least `steps_per_epoch * epochs` batches (in this case, 62.5 batches). You may need to use the repeat() function when building your dataset.
+14/14 [==============================] - 12s 787ms/step - loss: 1.0300 - accuracy: 0.5426 - val_loss: 0.8979 - val_accuracy: 0.5495
+Epoch 2/10
+14/14 [==============================] - 10s 681ms/step - loss: 0.3244 - accuracy: 0.8812
+Epoch 3/10
+14/14 [==============================] - 10s 683ms/step - loss: 0.1425 - accuracy: 0.9821
+Epoch 4/10
+14/14 [==============================] - 10s 680ms/step - loss: 0.0709 - accuracy: 1.0000
+Epoch 5/10
+14/14 [==============================] - 10s 680ms/step - loss: 0.0391 - accuracy: 1.0000
+Epoch 6/10
+14/14 [==============================] - 10s 684ms/step - loss: 0.0279 - accuracy: 1.0000
+Epoch 7/10
+14/14 [==============================] - 10s 696ms/step - loss: 0.0192 - accuracy: 1.0000
+Epoch 8/10
+14/14 [==============================] - 10s 688ms/step - loss: 0.0161 - accuracy: 1.0000
+Epoch 9/10
+14/14 [==============================] - 10s 696ms/step - loss: 0.0123 - accuracy: 1.0000
+Epoch 10/10
+14/14 [==============================] - 10s 690ms/step - loss: 0.0104 - accuracy: 1.0000</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training Log'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.plot(logs.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'Training Loss'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.plot(logs.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'Training Accuracy'</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> model.evaluate(test_dataset)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> res[<span class="dv">1</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy [perc]: </span><span class="sc">%.1f</span><span class="st">"</span> <span class="op">%</span>(accuracy<span class="op">*</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>5/5 [==============================] - 1s 160ms/step - loss: 0.8013 - accuracy: 0.5929
+Accuracy [perc]: 59.3</code></pre>
+</div>
+</div>
+<p>The model’s low accuracy may be attributed to underfitting, where it fails to capture the complexity of the data, resulting in poor generalization. Alternatively, it could be suffering from overfitting, where the model becomes too specific to the training data and performs poorly on unseen examples.</p>
+</section>
+<section id="with-vgg16" class="level3">
+<h3 class="anchored" data-anchor-id="with-vgg16">with VGG16</h3>
+<p>VGG16 is a pre-trained convolutional neural network architecture that was introduced as part of the Visual Geometry Group’s participation in the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) in 2014.</p>
+<p>It consists of 16 layers, including 13 convolutional layers and 3 fully connected layers, making it deeper than previous models. The network is known for its simplicity and effectiveness in image classification tasks, and its pre-trained weights can be leveraged for transfer learning, allowing developers to use it as a powerful feature extractor for a wide range of visual recognition tasks.</p>
+<div class="cell" data-execution_count="7">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>train_dir <span class="op">=</span> <span class="st">'data/train'</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>test_dir <span class="op">=</span> <span class="st">'data/test'</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>vgg16file <span class="op">=</span> <span class="st">'vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>vgg16 <span class="op">=</span>  VGG16(include_top<span class="op">=</span><span class="va">False</span>, input_shape<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>,<span class="dv">3</span>), weights<span class="op">=</span>vgg16file)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from images using VGG16 model</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_features(generator, sample_count):</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> np.zeros(shape<span class="op">=</span>(sample_count, <span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">512</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> np.zeros(shape<span class="op">=</span>(sample_count))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> inputs_batch, labels_batch <span class="kw">in</span> generator:</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        features_batch <span class="op">=</span> vgg16.predict(inputs_batch)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        features[i<span class="op">*</span><span class="dv">32</span>:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">32</span>] <span class="op">=</span> features_batch</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        labels[i<span class="op">*</span><span class="dv">32</span>:(i<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">32</span>] <span class="op">=</span> np.argmax(labels_batch, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        i<span class="op">+=</span><span class="dv">1</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">*</span><span class="dv">32</span><span class="op">&gt;=</span>sample_count:</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> features, labels</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the directory and the number of samples for feature extraction</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>generator <span class="op">=</span> ImageDataGenerator(rescale <span class="op">=</span> <span class="fl">1.</span><span class="op">/</span><span class="dv">255</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>train_generator <span class="op">=</span> generator.flow_from_directory(train_dir, target_size<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>), batch_size<span class="op">=</span><span class="dv">32</span>, class_mode<span class="op">=</span><span class="st">'categorical'</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>train_sample_count <span class="op">=</span> <span class="dv">557</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>train_features, train_labels <span class="op">=</span> extract_features(train_generator, train_sample_count)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>test_generator <span class="op">=</span> generator.flow_from_directory(test_dir, target_size<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>), batch_size<span class="op">=</span><span class="dv">32</span>, class_mode<span class="op">=</span><span class="st">'categorical'</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>test_sample_count <span class="op">=</span> <span class="dv">140</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>test_features, test_labels <span class="op">=</span> extract_features(test_generator, test_sample_count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 557 images belonging to 2 classes.
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 1s 706ms/step
+Found 140 images belonging to 2 classes.
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 2s 2s/step
+1/1 [==============================] - 1s 621ms/step</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> Sequential([</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    Flatten(input_shape <span class="op">=</span> (<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">512</span>)),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    Dense(<span class="dv">128</span>, activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    Dense(<span class="dv">2</span>, activation<span class="op">=</span><span class="st">'softmax'</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>model2.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>, loss<span class="op">=</span><span class="st">'sparse_categorical_crossentropy'</span>, metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>checkpoint <span class="op">=</span> ModelCheckpoint(<span class="st">"vgg16_1.h5"</span>, monitor<span class="op">=</span><span class="st">'val_accuracy'</span>, verbose<span class="op">=</span><span class="dv">1</span>,save_best_only<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                             save_weights_only<span class="op">=</span><span class="va">False</span>, mode<span class="op">=</span><span class="st">'auto'</span>, period<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>early <span class="op">=</span> EarlyStopping(monitor<span class="op">=</span><span class="st">'val_accuracy'</span>, min_delta<span class="op">=</span><span class="dv">0</span>, patience<span class="op">=</span><span class="dv">20</span>, verbose<span class="op">=</span><span class="dv">1</span>, mode<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>history2 <span class="op">=</span> model2.fit(train_features, train_labels, epochs<span class="op">=</span><span class="dv">20</span>, validation_split<span class="op">=</span><span class="fl">0.2</span>, callbacks<span class="op">=</span>[checkpoint, early])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:`period` argument is deprecated. Please use `save_freq` to specify the frequency in number of batches seen.
+Epoch 1/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 3.6519 - accuracy: 0.5057
+Epoch 1: val_accuracy improved from -inf to 0.67857, saving model to vgg16_1.h5
+14/14 [==============================] - 0s 12ms/step - loss: 3.1537 - accuracy: 0.5236 - val_loss: 0.5144 - val_accuracy: 0.6786
+Epoch 2/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.5746 - accuracy: 0.7159
+Epoch 2: val_accuracy improved from 0.67857 to 0.71429, saving model to vgg16_1.h5
+14/14 [==============================] - 0s 8ms/step - loss: 0.5270 - accuracy: 0.7461 - val_loss: 0.5808 - val_accuracy: 0.7143
+Epoch 3/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.2592 - accuracy: 0.8807
+Epoch 3: val_accuracy improved from 0.71429 to 0.84821, saving model to vgg16_1.h5
+14/14 [==============================] - 0s 7ms/step - loss: 0.2385 - accuracy: 0.8966 - val_loss: 0.2800 - val_accuracy: 0.8482
+Epoch 4/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.1334 - accuracy: 0.9631
+Epoch 4: val_accuracy improved from 0.84821 to 0.96429, saving model to vgg16_1.h5
+14/14 [==============================] - 0s 8ms/step - loss: 0.1269 - accuracy: 0.9685 - val_loss: 0.1926 - val_accuracy: 0.9643
+Epoch 5/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0809 - accuracy: 0.9915
+Epoch 5: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0832 - accuracy: 0.9933 - val_loss: 0.2033 - val_accuracy: 0.9375
+Epoch 6/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0680 - accuracy: 0.9972
+Epoch 6: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0645 - accuracy: 0.9978 - val_loss: 0.2273 - val_accuracy: 0.9018
+Epoch 7/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0501 - accuracy: 0.9972
+Epoch 7: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0497 - accuracy: 0.9978 - val_loss: 0.1884 - val_accuracy: 0.9554
+Epoch 8/20
+12/14 [========================&gt;.....] - ETA: 0s - loss: 0.0400 - accuracy: 1.0000
+Epoch 8: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 6ms/step - loss: 0.0396 - accuracy: 1.0000 - val_loss: 0.1847 - val_accuracy: 0.9464
+Epoch 9/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0315 - accuracy: 1.0000
+Epoch 9: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0323 - accuracy: 1.0000 - val_loss: 0.1907 - val_accuracy: 0.9554
+Epoch 10/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0269 - accuracy: 1.0000
+Epoch 10: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0276 - accuracy: 1.0000 - val_loss: 0.1901 - val_accuracy: 0.9554
+Epoch 11/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0231 - accuracy: 1.0000
+Epoch 11: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0234 - accuracy: 1.0000 - val_loss: 0.1884 - val_accuracy: 0.9464
+Epoch 12/20
+10/14 [====================&gt;.........] - ETA: 0s - loss: 0.0212 - accuracy: 1.0000
+Epoch 12: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0203 - accuracy: 1.0000 - val_loss: 0.1956 - val_accuracy: 0.9554
+Epoch 13/20
+10/14 [====================&gt;.........] - ETA: 0s - loss: 0.0174 - accuracy: 1.0000
+Epoch 13: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0178 - accuracy: 1.0000 - val_loss: 0.1892 - val_accuracy: 0.9464
+Epoch 14/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0153 - accuracy: 1.0000
+Epoch 14: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0157 - accuracy: 1.0000 - val_loss: 0.1906 - val_accuracy: 0.9464
+Epoch 15/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0146 - accuracy: 1.0000
+Epoch 15: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 6ms/step - loss: 0.0143 - accuracy: 1.0000 - val_loss: 0.1883 - val_accuracy: 0.9286
+Epoch 16/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0128 - accuracy: 1.0000
+Epoch 16: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 6ms/step - loss: 0.0126 - accuracy: 1.0000 - val_loss: 0.2001 - val_accuracy: 0.9464
+Epoch 17/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0112 - accuracy: 1.0000
+Epoch 17: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0113 - accuracy: 1.0000 - val_loss: 0.1912 - val_accuracy: 0.9375
+Epoch 18/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0111 - accuracy: 1.0000
+Epoch 18: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0105 - accuracy: 1.0000 - val_loss: 0.1988 - val_accuracy: 0.9375
+Epoch 19/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0099 - accuracy: 1.0000
+Epoch 19: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 7ms/step - loss: 0.0096 - accuracy: 1.0000 - val_loss: 0.1931 - val_accuracy: 0.9375
+Epoch 20/20
+11/14 [======================&gt;.......] - ETA: 0s - loss: 0.0084 - accuracy: 1.0000
+Epoch 20: val_accuracy did not improve from 0.96429
+14/14 [==============================] - 0s 6ms/step - loss: 0.0085 - accuracy: 1.0000 - val_loss: 0.1980 - val_accuracy: 0.9375</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the training and validation accuracy</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>training_accuracy <span class="op">=</span> history2.history[<span class="st">'accuracy'</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>validation_accuracy <span class="op">=</span> history2.history[<span class="st">'val_accuracy'</span>]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the training and validation loss</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>training_loss <span class="op">=</span> history2.history[<span class="st">'loss'</span>]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>validation_loss <span class="op">=</span> history2.history[<span class="st">'val_loss'</span>]</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the accuracy</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>plt.plot(training_accuracy, label<span class="op">=</span><span class="st">'Training Accuracy'</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>plt.plot(validation_accuracy, label<span class="op">=</span><span class="st">'Validation Accuracy'</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training and Validation Accuracy'</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the loss</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>plt.plot(training_loss, label<span class="op">=</span><span class="st">'Training Loss'</span>)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>plt.plot(validation_loss, label<span class="op">=</span><span class="st">'Validation Loss'</span>)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training and Validation Loss'</span>)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-10-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y_prediction <span class="op">=</span> np.argmax(model2.predict(test_features), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> accuracy_score(y_true<span class="op">=</span>test_labels, y_pred<span class="op">=</span>y_prediction)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Accuracy: </span><span class="sc">%.2f</span><span class="st">"</span> <span class="op">%</span>(acc<span class="op">*</span><span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>5/5 [==============================] - 0s 1ms/step
+Accuracy: 79.29</code></pre>
+</div>
+</div>
+<p>As you see, applying VGG16 as a pre-trained model has improved the accuracy due to its deep architecture and extensive feature extraction capabilities.</p>
+<p>The network’s pre-trained weights, learned from a large-scale dataset, enable it to recognize complex patterns and features, making it highly effective in various visual recognition scenarios.</p>
+<section id="confusion-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="confusion-matrix">Confusion matrix</h4>
+<div class="cell" data-execution_count="11">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>conf_matrix <span class="op">=</span> confusion_matrix(y_true<span class="op">=</span>test_labels, y_pred<span class="op">=</span>y_prediction)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>class_labels <span class="op">=</span> [<span class="st">'Cats'</span>, <span class="st">'Dogs'</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay(conf_matrix, display_labels<span class="op">=</span>class_labels).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x29349f400&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="save-models" class="level3">
+<h3 class="anchored" data-anchor-id="save-models">Save models</h3>
+<div class="cell" data-execution_count="18">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model2.save(<span class="st">'CatsDogs_sequentialModel.h5'</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>vgg16.save(<span class="st">'CatsDogs_vgg16.h5'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.</code></pre>
+</div>
+</div>
+<section id="test" class="level4">
+<h4 class="anchored" data-anchor-id="test">Test</h4>
+<div class="cell" data-execution_count="16">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>new_image_path <span class="op">=</span><span class="st">"data/test/cats/cat_355.jpg"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>im<span class="op">=</span>plt.imshow(np.asarray(Image.<span class="bu">open</span>(new_image_path)))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>im</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>class_labels <span class="op">=</span> [<span class="st">'Cats'</span>, <span class="st">'Dogs'</span>]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_image(img_path):</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> load_img(img_path, target_size<span class="op">=</span>(<span class="dv">224</span>, <span class="dv">224</span>))</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> img_to_array(img)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> np.expand_dims(img, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> img <span class="op">/</span> <span class="fl">255.0</span>  <span class="co"># Normalize the image</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> img</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the new image</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> preprocess_image(new_image_path)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from the new image using VGG16 model</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>new_features <span class="op">=</span> vgg16.predict(new_image)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Make prediction on the new image</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> model2.predict(new_features)</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>predicted_label <span class="op">=</span> np.argmax(prediction)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(predicted_label)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted label:"</span>, class_labels[predicted_label])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 82ms/step
+1/1 [==============================] - 0s 9ms/step
+[[9.991073e-01 8.927198e-04]]
+0
+Predicted label: Cats</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>new_image_path <span class="op">=</span><span class="st">"data/test/dogs/dog_302.jpg"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>im<span class="op">=</span>plt.imshow(np.asarray(Image.<span class="bu">open</span>(new_image_path)))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>im</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>class_labels <span class="op">=</span> [<span class="st">'Cats'</span>, <span class="st">'Dogs'</span>]</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_image(img_path):</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> load_img(img_path, target_size<span class="op">=</span>(<span class="dv">224</span>, <span class="dv">224</span>))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> img_to_array(img)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> np.expand_dims(img, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> img <span class="op">/</span> <span class="fl">255.0</span>  <span class="co"># Normalize the image</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> img</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the new image</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> preprocess_image(new_image_path)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from the new image using VGG16 model</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>new_features <span class="op">=</span> vgg16.predict(new_image)</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Make prediction on the new image</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> model2.predict(new_features)</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction)</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>predicted_label <span class="op">=</span> np.argmax(prediction)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(predicted_label)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted label:"</span>, class_labels[predicted_label])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 73ms/step
+1/1 [==============================] - 0s 9ms/step
+[[0.01044283 0.9895572 ]]
+1
+Predicted label: Dogs</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://images.freeimages.com/images/large-previews/3f8/dog-1383342.jpg"</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>tempfile_path <span class="op">=</span>tempfile.mktemp()</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>urllib.request.urlretrieve(url, tempfile_path)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> load_img(tempfile_path, target_size<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>im<span class="op">=</span>plt.imshow(np.asarray(new_image))</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>im</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> img_to_array(new_image)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> np.expand_dims(new_image, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>new_image <span class="op">=</span> new_image <span class="op">/</span> <span class="fl">255.0</span>  <span class="co"># Normalize the image</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract features from the new image using VGG16 model</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>new_features <span class="op">=</span> vgg16.predict(new_image)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Make prediction on the new image</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> model2.predict(new_features)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>predicted_label <span class="op">=</span> np.argmax(prediction)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(predicted_label)</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted label:"</span>, class_labels[predicted_label])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 83ms/step
+1/1 [==============================] - 0s 9ms/step
+[[3.6323289e-04 9.9963677e-01]]
+1
+Predicted label: Dogs</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Cats and dogs_files/figure-html/cell-16-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Website made with <a href="https://quarto.org/">Quarto</a></div>   
+  </div>
+</footer>
+
+
+
+</body></html>

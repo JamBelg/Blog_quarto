@@ -1,9 +1,10 @@
 ---
-title: "Beth dataset"
+title: "BETH dataset"
+subtitle: "Application of various Machine Learning models on real cybersecurity data"
 author: "Jamel Belgacem and Papa Moryba Kouate"
 date: "2024-06-15"
 categories: [Machine learning, Code, Cybersecurity]
-image: "image.jpg"
+image: "cybersecurity.jpeg"
 ---
 
 This is a post with executable code.

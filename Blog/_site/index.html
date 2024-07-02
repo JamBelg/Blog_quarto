@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -162,7 +162,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Code">Code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Cybersecurity">Cybersecurity <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Machine learning">Machine learning <span class="quarto-category-count">(1)</span></div><div class="category" data-category="analysis">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Code">Code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Cybersecurity">Cybersecurity <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data visualization">Data visualization <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Deep learning">Deep learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Machine learning">Machine learning <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Picture classification">Picture classification <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Text classification">Text classification <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -175,48 +175,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="news,code,analysis" data-listing-date-sort="1719878400000" data-listing-file-modified-sort="1719937509116" data-listing-reading-time-sort="0.035">
-<div class="thumbnail">
-<p><a href="./posts/post-with-code/index.html"> <img src="./posts/post-with-code/image.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/post-with-code/index.html">
-<h3 class="no-anchor listing-title">
-Post With Code
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('analysis'); return false;">
-analysis
-</div>
-</div>
-<a href="./posts/post-with-code/index.html">
-<div class="listing-description">
-This is a post with executable code.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/post-with-code/index.html">
-<div class="listing-date">
-Jul 2, 2024
-</div>
-<div class="listing-author">
-Harlow Malloc
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="news" data-listing-date-sort="1719619200000" data-listing-file-modified-sort="1719937509116" data-listing-reading-time-sort="0.16">
+<div class="quarto-post image-right" data-index="0" data-categories="news" data-listing-date-sort="1719619200000" data-listing-file-modified-sort="1719937509116" data-listing-reading-time-sort="0.16">
 <div class="thumbnail">
 <p><a href="./posts/welcome/index.html"> <img src="./posts/welcome/thumbnail.jpg" class="thumnail-image"> </a></p>
 </div>
@@ -251,17 +210,17 @@ Tristan O’Malley
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="Machine learning,Code,Cybersecurity" data-listing-date-sort="1718409600000" data-listing-file-modified-sort="1719937785655" data-listing-reading-time-sort="0.035">
+<div class="quarto-post image-right" data-index="1" data-categories="Machine learning,Code,Cybersecurity" data-listing-date-sort="1718409600000" data-listing-file-modified-sort="1719949918983" data-listing-reading-time-sort="0.035">
 <div class="thumbnail">
-<p><a href="./posts/Beth dataset/index.html"> <img src="./posts/Beth dataset/image.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/Beth dataset/index.html"> <img src="./posts/Beth dataset/cybersecurity.jpeg" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/Beth dataset/index.html">
 <h3 class="no-anchor listing-title">
-Beth dataset
+BETH dataset
 </h3>
 <div class="listing-subtitle">
-
+Application of various Machine Learning models on real cybersecurity data
 </div>
 </a>
 <div class="listing-categories">
@@ -288,6 +247,155 @@ Jun 15, 2024
 </div>
 <div class="listing-author">
 Jamel Belgacem and Papa Moryba Kouate
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="Deep learning,Picture classification" data-listing-date-sort="1690416000000" data-listing-file-modified-sort="1719950374251" data-listing-reading-time-sort="1.825">
+<div class="thumbnail">
+<p><a href="./posts/Picture classification/Cats and dogs.html"> <img src="./posts/Picture classification/image_catdog.PNG" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/Picture classification/Cats and dogs.html">
+<h3 class="no-anchor listing-title">
+Picture classification (cat or dog)
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Deep learning'); return false;">
+Deep learning
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Picture classification'); return false;">
+Picture classification
+</div>
+</div>
+<a href="./posts/Picture classification/Cats and dogs.html">
+<div class="listing-description">
+Deep learning is a subset of artificial intelligence that involves training neural networks to learn and recognize…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/Picture classification/Cats and dogs.html">
+<div class="listing-date">
+Jul 27, 2023
+</div>
+<div class="listing-author">
+Jamel Belgacem
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="Deep learning,Picture classification" data-listing-date-sort="1689811200000" data-listing-file-modified-sort="1719950352711" data-listing-reading-time-sort="3.82">
+<div class="thumbnail">
+<p><a href="./posts/Image classification-Flowers/Flower pictures classification.html"> <img src="./posts/Image classification-Flowers/image_flowers.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/Image classification-Flowers/Flower pictures classification.html">
+<h3 class="no-anchor listing-title">
+Picture classification (flowers)
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Deep learning'); return false;">
+Deep learning
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Picture classification'); return false;">
+Picture classification
+</div>
+</div>
+<a href="./posts/Image classification-Flowers/Flower pictures classification.html">
+<div class="listing-description">
+Another application of deep learning is the image classification.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/Image classification-Flowers/Flower pictures classification.html">
+<div class="listing-date">
+Jul 20, 2023
+</div>
+<div class="listing-author">
+Jamel Belgacem
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="Deep learning,Text classification" data-listing-date-sort="1689120000000" data-listing-file-modified-sort="1719950324691" data-listing-reading-time-sort="2.595">
+<div class="thumbnail">
+<p><a href="./posts/Cancer Text classification/Cancer text classification.html"> <img src="./posts/Cancer Text classification/image_cancer.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/Cancer Text classification/Cancer text classification.html">
+<h3 class="no-anchor listing-title">
+Text classification
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Deep learning'); return false;">
+Deep learning
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Text classification'); return false;">
+Text classification
+</div>
+</div>
+<a href="./posts/Cancer Text classification/Cancer text classification.html">
+<div class="listing-description">
+Text classification with deep learning leverages the power of deep neural networks to automatically extract complex features from textual data. By using techniques like…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/Cancer Text classification/Cancer text classification.html">
+<div class="listing-date">
+Jul 12, 2023
+</div>
+<div class="listing-author">
+Jamel Belgacem
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="Data visualization" data-listing-date-sort="1669766400000" data-listing-file-modified-sort="1719950415484" data-listing-reading-time-sort="5.895">
+<div class="thumbnail">
+<p><a href="./posts/Data visualization-Gold origin/Gold_origin.html"> <img src="./posts/Data visualization-Gold origin/gold.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/Data visualization-Gold origin/Gold_origin.html">
+<h3 class="no-anchor listing-title">
+Gold origin
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Data visualization'); return false;">
+Data visualization
+</div>
+</div>
+<a href="./posts/Data visualization-Gold origin/Gold_origin.html">
+<div class="listing-description">
+The following code fetches a CSV file from my GitHub repository and loads it into a data frame called “df”.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/Data visualization-Gold origin/Gold_origin.html">
+<div class="listing-date">
+Nov 30, 2022
+</div>
+<div class="listing-author">
+Jamel Belgacem
 </div>
 </a>
 </div>

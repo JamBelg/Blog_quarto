@@ -2,9 +2,12 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/post-with-code/index.html",
       "/posts/welcome/index.html",
-      "/posts/Beth dataset/index.html"
+      "/posts/Beth dataset/index.html",
+      "/posts/Picture classification/Cats and dogs.html",
+      "/posts/Image classification-Flowers/Flower pictures classification.html",
+      "/posts/Cancer Text classification/Cancer text classification.html",
+      "/posts/Data visualization-Gold origin/Gold_origin.html"
     ]
   }
 ]

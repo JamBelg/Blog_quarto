@@ -1,0 +1,167 @@
+---
+title: Gold origin
+author: Jamel Belgacem
+date: 'November 30, 2022'
+categories: [Data visualization]
+image: "gold.jpg"
+format:
+    html:
+        code-fold: true
+        code-tools: true
+        code-link: true
+---
+
+
+```{r 'Load librarries', warning=FALSE, message=FALSE}
+library(tidyverse)
+library(countrycode)
+library(maps)
+library(rworldmap)
+library(tidygraph)
+library(ggraph)
+library(gridExtra)
+library(DT)
+library(htmlwidgets)
+library(knitr)
+bg_color <- '#F2E7D5'
+```
+
+The following code fetches a CSV file from my GitHub repository and loads it into a data frame called "df".
+```{r 'Read data', eval=TRUE}
+# Read data from github repository
+url <- "https://raw.githubusercontent.com/JamBelg/Gold-origin/main/data.csv"
+df <- read.csv(url, sep = ',', col.names=c('Flow','Year','Period','Tarif','key','text','Land','Quantity','Value'))
+```
+
+
+
+
+```{r 'Data preparation', eval=TRUE}
+# Data preparation
+
+df_plot <- df %>%
+  filter(Period=='_Year', 
+         Year==2021, 
+         text=='mined gold (according to the "Explanatory notes")',
+         Land!="_ALL") %>%
+  select(Land,Quantity,Value)
+
+
+df_plot$Land <- as.character(df_plot$Land)
+
+# ISO Country code
+df_plot[df_plot$Land=='Guiana, French',1] <- 'French Guiana'
+df_plot[df_plot$Land=='USA',1] <- "United States of America"
+df_plot[df_plot$Land=="Côte d'Ivoire",1] <- "Ivory Coast"
+df_plot[df_plot$Land=='Tanzania',1] <- "United Republic of Tanzania"
+df_plot[df_plot$Land=='Hong Kong',1] <- "Hong Kong S.A.R."
+df_plot <- df_plot %>%
+  mutate(Land=countryname(Land, destination='country.name.en'))
+```
+
+List of countries:
+```{r}
+levels(as.factor(df_plot$Land))
+```
+
+
+```{r}
+# DT datatable
+htmltools::tagList(datatable(df_plot))
+```
+
+```{r, eval=TRUE}
+#| label: fig-charts
+#| fig-cap: "Charts"
+#| fig-subcap: 
+#|   - "Geo plot"
+#| layout-ncol: 1
+# Longitude & Latitude
+library(maps)
+library(rworldmap)
+world_map <- getMap()
+worldmap_df <- fortify(world_map)
+worldmap_df <- worldmap_df %>%
+  left_join(.,y=df_plot,by=c("id"="Land"))
+worldmap_df <- worldmap_df %>%
+  mutate(color=ifelse(id=='Switzerland','#FFE15D',
+                      ifelse(id %in% df_plot$Land,
+                             ifelse(Quantity>100000,"#8E3200",
+                                    ifelse(Quantity>50000,"#D1512D",
+                                           ifelse(Quantity>10000,"#D7A86E","#FFEBC1"))),"White")))
+
+
+# Countries shape
+country_shapes <- geom_polygon(data=worldmap_df[worldmap_df$id!='Antarctica',], 
+                               aes(long,lat,group=group, fill=color),
+                               show.legend=FALSE, colour='black')
+
+
+as_tibble(df_plot) %>%
+  select(Land, Quantity) %>%
+  arrange(desc(Quantity)) %>%
+  top_n(20) %>%
+  tableGrob(
+    rows=NULL,
+    cols = c("Country","Quantity [kg]"),
+    theme=ttheme_default(
+      base_size = 5,
+      core=list(
+        fg_params=list(
+          # fontfamily=font_rc,
+          col=c(rep("#8E3200",3),rep("#D1512D",3),rep("#D7A86E",14)),
+          hjust=c(rep(0,20), rep(0.5,20)),
+          x=c(rep(0.05,20), rep(.5,20))
+        )
+      )
+    )
+  ) ->tbl
+
+library(gridExtra)
+library(grid)
+title <- textGrob(expression(bold(underline("Top 20 (by quantity) Mining gold origin"))),
+                  y=0.95,vjust=0.5, gp=gpar(fontsize=10, fontface='bold'))
+                                            
+gt <- gTree(children=gList(tbl,title))
+
+# Plot
+ggplot()+
+  country_shapes+scale_fill_identity()+
+  coord_equal()+
+  theme_dark()+
+  theme(
+    # TITLE
+    plot.title.position = "plot",
+    plot.title = element_text(
+                              #family = title_font,
+                              face = "bold",
+                              color = "black",
+                              size = 20,
+                              lineheight = 1,
+                              hjust = 0.5,
+                              margin = margin(20,0,20,0)),
+    plot.subtitle = element_text(
+                                 #family = title_font,
+                                 face = "bold",
+                                 color = "black",
+                                 size = 15,
+                                 lineheight = 1,
+                                 hjust = 0.5),
+    # CAPTION
+    plot.caption=element_text(color="#393E46",
+                              # family = title_font,
+                              size=12,
+                              hjust=1),
+    axis.text=element_blank(),
+    axis.title = element_blank()
+  )+
+  labs(
+    title="Origin of the mining gold refined in Switzerland",
+    subtitle="Year 2021",
+    caption="Source: Swiss federal office for customs and border security"
+  )+
+  annotation_custom(gt, xmin = -50, xmax = 0, ymin = 50, ymax=0) #, xmin = -16920565, xmax = -14000000,  ymin=761378/2.25, ymax = 761378
+
+```
+
+
